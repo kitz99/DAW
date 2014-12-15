@@ -1,0 +1,79 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage"%>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link rel="stylesheet" href="App_Themes/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="App_Themes/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="App_Themes/style.css" type="text/css" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <title>Engine de stiri - Timofte Bogdan Mihai - grupa 333</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+<body>
+
+    <div class="bara-red"></div>
+    <form id="form1" runat="server">
+    <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="Default.aspx"><img class="logo" src="App_Themes/images/logo.png" /></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="Default.aspx">Home</a></li>
+                        <%
+                            if (Session["loggedInUser"] != null && (Session["userRole"].ToString() == "editor" || Session["userRole"].ToString() == "admin"))
+                            {
+                                Response.Write("<li><a href=\"EditorPannel.aspx\">Control Panel</a></li>");
+                            }
+                        %>
+                        <%
+                            if (Session["loggedInUser"] != null && Session["userRole"].ToString() == "admin")
+                            {
+                                Response.Write("<li><a href=\"Manager.aspx\">Manager</a></li>");
+                            }
+                        %>
+                         <%
+                            if (Session["loggedInUser"] == null)
+                            {
+                                Response.Write("<li><a href=\"Login.aspx\">Login</a></li>");
+                                Response.Write("<li><a href=\"Register.aspx\">Register</a></li>");
+                            }
+                        %>
+                   </ul>
+                    <div class="search">
+                          <asp:TextBox ID="searchQuery" runat="server" CssClass="form-control input-sm search-adapt" MaxLength="64"></asp:TextBox>
+                          <asp:Button ID="search" runat="server" CssClass="btn btn-default buton-adapt" Text="Search" OnClick="goDoStuff"/>
+                        </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <% if (Session["loggedInUser"] != null)
+                           {
+                               Response.Write("<span class='username'><span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\"></span> Hello, <strong>" + Session["loggedInUser"].ToString() + "</strong>!</span>");
+                               Response.Write("<span class='role'>You are: <strong>" + Session["userRole"].ToString() + "</strong> <a class='logout-bar' href='Logout.aspx'><span class='glyphicon glyphicon-off'></span></a></span>");
+                           }
+                        %>
+                    </ul>
+                </div>
+        </nav>
+    <section class="container">
+        <asp:ContentPlaceHolder ID="jumbothron" runat="server"></asp:ContentPlaceHolder>
+        
+            <div>
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+        </form>
+    </section>
+</body>
+</html>
